@@ -1,57 +1,53 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: '25ch',
-        },
-    },
-}));
 
-export default function TextFields(props) {
-    const classes = useStyles();
+export default function TextFields({Callback, ...props}) {
+
+        const [type, setType] = useState({
+            index: '',
+            name: 'type',
+        });
+
+        const handleChange = (event) => {
+            const name = event.target.name;
+            setType({
+                ...type,
+                [name]: event.target.value,
+            });
+            Callback(type)
+        };
 
     return (
-        <form className={classes.root} noValidate autoComplete="off">
-            <div>
-                <TextField
-
-                />
-                {/*<TextField required id="standard-required" label="Required" defaultValue="Hello World" />*/}
-                {/*<TextField disabled id="standard-disabled" label="Disabled" defaultValue="Hello World" />*/}
-                {/*<TextField*/}
-                {/*    id="standard-password-input"*/}
-                {/*    label="Password"*/}
-                {/*    type="password"*/}
-                {/*    autoComplete="current-password"*/}
-                {/*/>*/}
-                {/*<TextField*/}
-                {/*    id="standard-read-only-input"*/}
-                {/*    label="Read Only"*/}
-                {/*    defaultValue="Hello World"*/}
-                {/*    InputProps={{*/}
-                {/*        readOnly: true,*/}
-                {/*    }}*/}
-                {/*/>*/}
-                {/*<TextField*/}
-                {/*    id="standard-number"*/}
-                {/*    label="Number"*/}
-                {/*    type="number"*/}
-                {/*    InputLabelProps={{*/}
-                {/*        shrink: true,*/}
-                {/*    }}*/}
-                {/*/>*/}
-                {/*<TextField id="standard-search" label="Search field" type="search" />*/}
-                {/*<TextField*/}
-                {/*    id="standard-helperText"*/}
-                {/*    label="Helper text"*/}
-                {/*    defaultValue="Default Value"*/}
-                {/*    helperText="Some important text"*/}
-                {/*/>*/}
-            </div>
+        <form noValidate autoComplete="off">
+            {(props.type === 'text' ?
+                <div>
+                    <TextField
+                        label={props.label}
+                    />
+                </div> :
+                <FormControl>
+                    <InputLabel htmlFor="index-native-simple">Тип события</InputLabel>
+                    <Select
+                        native
+                        value={type.index}
+                        onChange={(event) => handleChange(event)}
+                        inputProps={{
+                            name: 'index',
+                            id: 'index-native-simple',
+                        }}
+                    >
+                        <option aria-label="None" value="" />
+                        <option value={0}>Праздничные дни</option>
+                        <option value={1}>Мероприятия</option>
+                        <option value={2}>Пометки / Другое</option>
+                    </Select>
+                </FormControl>
+            )}
         </form>
+
     );
 }
